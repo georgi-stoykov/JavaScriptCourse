@@ -61,7 +61,26 @@ startGameBtn.addEventListener('click', () => {
   gameIsRunning = false;
 });
 
-const sumEverything = (...numbers) => { // like args[] in C#
+// not related to game
+
+const combine = (resultHandler, operation, ...numbers) => {
+  const validateNumber = (number) => {
+    return isNaN(number) ? 0 : number;
+  };
+
+  let sum = 0;
+  for (const num of numbers) {
+    if (operation == 'ADD') {
+      sum += validateNumber(num);
+    } else {
+      sum -= validateNumber(num);
+    }
+  }
+  resultHandler(sum);
+};
+
+const sumEverything = (...numbers) => {
+  // like args[] in C#
   let sum = 0;
   for (const num of numbers) {
     sum += num;
@@ -69,16 +88,16 @@ const sumEverything = (...numbers) => { // like args[] in C#
   return sum;
 };
 
-const subtractEverything = function () { 
+const subtractEverything = function () {
   let sum = 0;
-  for (const num of arguments) { // "arguments" is a global implicit variable that works only with the full "function()" declaration
+  for (const num of arguments) {
+    // "arguments" is a global implicit variable that works only with the full "function()" declaration
     sum += num;
   }
   return sum;
 };
 
-console.log(sumEverything(1, 45, 2, 39, 5, 8, -3 , 23));
-console.log(subtractEverything(3, 32, -15, 4));
+const showResult = (messageText, result) => console.log(messageText + ' ' + result);
 
-
-
+combine(showResult.bind(this, 'Adding result'), 'ADD', (1, 45, 2, 39, 5, 8, -3, 23));
+combine(showResult.bind(this, 'Subtracting result'), 'SUBTRACT', (3, 32, -15, 4));
